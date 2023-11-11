@@ -30,6 +30,8 @@ import { mdiIdeogramCjk } from '@mdi/js';
 import { mdiPrinterEye } from '@mdi/js';
 import { mdiListBox } from '@mdi/js';
 import { mdiClose } from '@mdi/js';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 
 export default function App() {
     // ナビゲーション
@@ -109,7 +111,7 @@ export default function App() {
     ];
 
     /**
-     * 作成中のテキストにペアを追加
+     * 作成中のテキストペアを追加
      * */
     const addTextPair = () => {
         const newWorkingTexts = [];
@@ -117,6 +119,18 @@ export default function App() {
         newWorkingTexts.push({ key: Date.now().toString(), kanji: "", yomi: "" });
         setWorkingTexts(newWorkingTexts);
         console.log(workingTexts);
+    };
+
+    /**
+     * 対象のテキストペアを削除
+     * @param {Number} index
+     */
+    const removeTextPair = (index) => {
+        console.log(index);
+        const newWorkingTexts = [];
+        workingTexts.map((item) => newWorkingTexts.push(item));
+        newWorkingTexts.splice(index, 1);
+        setWorkingTexts(newWorkingTexts);
     };
 
     /**
@@ -168,7 +182,10 @@ export default function App() {
                         <List>
                             {workingTexts.map((item, index) => (
                                 <ListItem key={item.key}>
-                                    <Icon path={mdiClose} size={1} />
+                                    <IconButton aria-label="delete" color="primary" onClick={() => removeTextPair(index)}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                    {/*<Button variant="contained" startIcon={<DeleteIcon />}></Button>*/}
                                     <TextField id="filled-basic" label="本文" variant="filled" onChange={(event) => editTextPair(index, 0, event.target.value)} />
                                     <TextField id="filled-basic" label="ふりがな" variant="filled" onChange={(event) => editTextPair(index, 1, event.target.value)} />
                                 </ListItem>
@@ -176,7 +193,7 @@ export default function App() {
                         </List>
                     </DialogContent>
                     <DialogActions>
-                        <Button variant="contained" onClick={addTextPair}>テキスト追加</Button>
+                        <Button variant="contained" onClick={addTextPair}>追加</Button>
                         <Button variant="contained" onClick={cancelDialog}>キャンセル</Button>
                         <Button variant="contained" onClick={closeDialog}>作成</Button>
                     </DialogActions>
