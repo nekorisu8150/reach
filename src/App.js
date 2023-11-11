@@ -9,14 +9,17 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
-import React from "react";
+import React, { Fragment } from "react";
 import { CREATE_MODE_READ, CREATE_MODE_WRITE, DIVIDERS_PAPER, KEY_SPEED_DIAL_READ, KEY_SPEED_DIAL_WRITE, KEY__NAVIGATION_LIST, KEY__NAVIGATION_PREVIEW, LABEL_NAVIGATION_LIST, LABEL_NAVIGATION_PREVIEW, NAME_SPEED_DIAL_READ, NAME_SPEED_DIAL_WRITE, VALUE_NAVIGATION_LIST, VALUE_NAVIGATION_PREVIEW } from "./Constant";
 import "./styles.css";
 
@@ -31,6 +34,8 @@ export default function App() {
     const [createMode, setCreateMode] = React.useState('');
     // 作成中のテキスト
     const [workingTexts, setWorkingTexts] = React.useState([]);
+    // 作成済みのテキストリスト
+    const [createdTextList, setCreatedTextList] = React.useState([]);
 
     // 作成ダイアログを表示
     const openDialog = () => {
@@ -62,7 +67,7 @@ export default function App() {
     // 作成ダイアログ キャンセル
     const cancelDialog = () => {
         setWorkingTexts([]);
-        setOpenState(false);
+        closeDialog();
     };
 
     // ナビゲーション
@@ -103,7 +108,7 @@ export default function App() {
     const addTextPair = () => {
         const newWorkingTexts = [];
         workingTexts.map((item) => newWorkingTexts.push(item));
-        newWorkingTexts.push({ key: Date.now().toString(), kanji: "", yomi: "" });
+        newWorkingTexts.push({ key: Date.now().toString(), body: "", yomi: "" });
         setWorkingTexts(newWorkingTexts);
         console.log(workingTexts);
     };
@@ -131,12 +136,26 @@ export default function App() {
         workingTexts.map((item) => newWorkingTexts.push(item));
         if (idx2 === 0) {
             // 本文の編集
-            newWorkingTexts[idx1].kanji = value;
+            newWorkingTexts[idx1].body = value;
         } else {
             // ふりがなの編集
             newWorkingTexts[idx1].yomi = value;
         }
         setWorkingTexts(newWorkingTexts);
+    };
+
+    /**
+     * 問題作成
+     * */
+    const createText = () => {
+        const newCreatedTextList = [];
+        createdTextList.map(item => newCreatedTextList.push(item));
+        newCreatedTextList.push({ key: Date.now().toString(), text: workingTexts });
+        setCreatedTextList(newCreatedTextList);
+        setWorkingTexts([]);
+
+        closeDialog();
+        console.log(createdTextList);
     };
 
     return (
@@ -182,9 +201,29 @@ export default function App() {
                     <DialogActions>
                         <Button variant="contained" onClick={addTextPair}>追加</Button>
                         <Button variant="contained" onClick={cancelDialog}>キャンセル</Button>
-                        <Button variant="contained" onClick={closeDialog}>作成</Button>
+                        <Button variant="contained" onClick={createText}>作成</Button>
                     </DialogActions>
                 </Dialog>
+
+                <List>
+                    {createdTextList.map((item, index) => (
+                        <Fragment key={item.key}>
+                            <ListItemButton>
+                                <ListItemText>
+                                    {item.text.map((_item, _index) => (
+                                        <ruby key={_item.key}>
+                                            {_item.body}
+                                            <rt>
+                                                {_item.yomi}
+                                            </rt>
+                                        </ruby>
+                                    ))}
+                                </ListItemText>
+                            </ListItemButton>
+                            <Divider />
+                        </Fragment>
+                    ))}
+                </List>
 
                 <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={15}>
                     <BottomNavigation showLabels
