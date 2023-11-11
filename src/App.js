@@ -236,8 +236,6 @@ export default function App() {
                         ))}
                     </BottomNavigation>
                 </Paper>
-                <Typography>Hello CodeSandbox</Typography>
-                <Typography>Start editing to see some magic happen!</Typography>
             </Box>
         </div>
     );
