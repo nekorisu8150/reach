@@ -1,12 +1,17 @@
+import { CREATE_MODE_READ, CREATE_MODE_WRITE, DIVIDERS_PAPER, KEY_SPEED_DIAL_READ, KEY_SPEED_DIAL_WRITE, KEY__NAVIGATION_LIST, KEY__NAVIGATION_PREVIEW, LABEL_NAVIGATION_LIST, LABEL_NAVIGATION_PREVIEW, NAME_SPEED_DIAL_READ, NAME_SPEED_DIAL_WRITE, VALUE_NAVIGATION_LIST, VALUE_NAVIGATION_PREVIEW } from "./Constant";
+
 import "./styles.css";
 import React from "react";
-import SpeedDial from '@mui/material/SpeedDial';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import SpeedDialAction from '@mui/material/SpeedDialAction';
+import { Button, TextField, List, ListItem } from "@mui/material";
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
+
+// スピードダイアル関連
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
 
 // ダイアログ関連
 import DialogTitle from '@mui/material/DialogTitle';
@@ -24,21 +29,23 @@ import { mdiSyllabaryHiragana } from '@mdi/js';
 import { mdiIdeogramCjk } from '@mdi/js';
 import { mdiPrinterEye } from '@mdi/js';
 import { mdiListBox } from '@mdi/js';
-import { Button, TextField, List, ListItem } from "@mui/material";
+import { mdiClose } from '@mdi/js';
 
 export default function App() {
     // ナビゲーション
-    const [navigationValue, setNavigationValue] = React.useState(0);
+    const [navigationValue, setNavigationValue] = React.useState(VALUE_NAVIGATION_LIST);
     // ダイアログのスクロール
     const [scroll, setScroll] = React.useState('paper');
     // ダイアログ
     const [openState, setOpenState] = React.useState(false);
     // 作成モード
     const [createMode, setCreateMode] = React.useState('');
+    // 作成中のテキスト
+    const [workingTexts, setWorkingTexts] = React.useState([]);
 
     // 作成ダイアログを表示
     const openDialog = () => {
-        setWorkingTexts([]);
+        addTextPair();
         setOpenState(true);
     };
 
@@ -51,7 +58,7 @@ export default function App() {
      * 作成画面起動(書き)
      * */
     const openDialogWrite = () => {
-        setCreateMode('書き');
+        setCreateMode(CREATE_MODE_WRITE);
         openDialog();
     };
 
@@ -59,7 +66,7 @@ export default function App() {
      * 作成画面起動(読み)
      * */
     const openDialogRead = () => {
-        setCreateMode('読み');
+        setCreateMode(CREATE_MODE_READ);
         openDialog();
     };
 
@@ -71,27 +78,64 @@ export default function App() {
 
     // ナビゲーション
     const actionsNavigation = [
-        { icon: <Icon path={mdiListBox} />, label: '一覧', key: 'List', value: 'list' },
-        { icon: <Icon path={mdiPrinterEye} />, label: 'プレビュー', key: 'Preview', value: 'preview' },
+        {
+            icon: <Icon path={mdiListBox} />,
+            label: LABEL_NAVIGATION_LIST,
+            key: KEY__NAVIGATION_LIST,
+            value: VALUE_NAVIGATION_LIST
+        },
+        {
+            icon: <Icon path={mdiPrinterEye} />,
+            label: LABEL_NAVIGATION_PREVIEW,
+            key: KEY__NAVIGATION_PREVIEW,
+            value: VALUE_NAVIGATION_PREVIEW
+        },
     ];
 
     // スピードダイアル
     const actionsSpeedDial = [
-        { icon: <Icon path={mdiIdeogramCjk} size={3} />, name: '書き', key: 'Write', clickEvent: openDialogWrite },
-        { icon: <Icon path={mdiSyllabaryHiragana} size={3} />, name: '読み', key: 'Read', clickEvent: openDialogRead },
+        {
+            icon: <Icon path={mdiIdeogramCjk} size={3} />,
+            name: NAME_SPEED_DIAL_WRITE,
+            key: KEY_SPEED_DIAL_WRITE,
+            clickEvent: openDialogWrite
+        },
+        {
+            icon: <Icon path={mdiSyllabaryHiragana} size={3} />,
+            name: NAME_SPEED_DIAL_READ,
+            key: KEY_SPEED_DIAL_READ,
+            clickEvent: openDialogRead
+        },
     ];
 
-    // 作成中のテキスト
-    const [workingTexts, setWorkingTexts] = React.useState([]);
-
-
-    // 作成中のテキストにペアを追加
+    /**
+     * 作成中のテキストにペアを追加
+     * */
     const addTextPair = () => {
         const newWorkingTexts = [];
         workingTexts.map((item) => newWorkingTexts.push(item));
         newWorkingTexts.push({ key: Date.now().toString(), kanji: "", yomi: "" });
         setWorkingTexts(newWorkingTexts);
         console.log(workingTexts);
+    };
+
+    /**
+     * テキストのペアを編集
+     * @param {number} idx1 n番目のペア
+     * @param {number} idx2 0:本文, 1:ふりがな
+     */
+    const editTextPair = (idx1, idx2, value) => {
+        //console.log(idx1, ", ", idx2, value);
+        const newWorkingTexts = [];
+        workingTexts.map((item) => newWorkingTexts.push(item));
+        if (idx2 === 0) {
+            // 本文の編集
+            newWorkingTexts[idx1].kanji = value;
+        } else {
+            // ふりがなの編集
+            newWorkingTexts[idx1].yomi = value;
+        }
+        setWorkingTexts(newWorkingTexts);
     };
 
     return (
@@ -120,19 +164,21 @@ export default function App() {
                             </Grid>
                         </Grid>
                     </DialogTitle>
-                    <DialogContent id="alert-dialog-description" dividers={scroll === 'paper'}>
+                    <DialogContent id="alert-dialog-description" dividers={scroll === DIVIDERS_PAPER}>
                         <List>
                             {workingTexts.map((item, index) => (
                                 <ListItem key={item.key}>
-                                    <TextField id="filled-basic" label="Filled" variant="filled" />
+                                    <Icon path={mdiClose} size={1} />
+                                    <TextField id="filled-basic" label="本文" variant="filled" onChange={(event) => editTextPair(index, 0, event.target.value)} />
+                                    <TextField id="filled-basic" label="ふりがな" variant="filled" onChange={(event) => editTextPair(index, 1, event.target.value)} />
                                 </ListItem>
                             ))}
                         </List>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={addTextPair}>追加</Button>
-                        <Button onClick={closeDialog}>キャンセル</Button>
-                        <Button onClick={closeDialog}>作成</Button>
+                        <Button variant="contained" onClick={addTextPair}>テキスト追加</Button>
+                        <Button variant="contained" onClick={cancelDialog}>キャンセル</Button>
+                        <Button variant="contained" onClick={closeDialog}>作成</Button>
                     </DialogActions>
                 </Dialog>
 
@@ -141,9 +187,7 @@ export default function App() {
                         value={navigationValue}
                         onChange={(event, newValue) => {
                             setNavigationValue(newValue);
-                        }}
-                        children={<p>heiheihei</p>}
-                    >
+                        }}>
                         {actionsNavigation.map((action) => (
                             <BottomNavigationAction label={action.label} icon={action.icon} key={action.key} value={action.value} />
                         ))}
