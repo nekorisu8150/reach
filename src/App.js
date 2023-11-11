@@ -1,37 +1,24 @@
-import { CREATE_MODE_READ, CREATE_MODE_WRITE, DIVIDERS_PAPER, KEY_SPEED_DIAL_READ, KEY_SPEED_DIAL_WRITE, KEY__NAVIGATION_LIST, KEY__NAVIGATION_PREVIEW, LABEL_NAVIGATION_LIST, LABEL_NAVIGATION_PREVIEW, NAME_SPEED_DIAL_READ, NAME_SPEED_DIAL_WRITE, VALUE_NAVIGATION_LIST, VALUE_NAVIGATION_PREVIEW } from "./Constant";
-
-import "./styles.css";
-import React from "react";
-import { Button, TextField, List, ListItem } from "@mui/material";
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Unstable_Grid2';
-
-// スピードダイアル関連
-import SpeedDial from '@mui/material/SpeedDial';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import SpeedDialAction from '@mui/material/SpeedDialAction';
-
-// ダイアログ関連
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-
-// ナビゲーション関連
+import { mdiIdeogramCjk, mdiListBox, mdiPrinterEye, mdiSyllabaryHiragana } from '@mdi/js';
+import Icon from '@mdi/react';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Button, List, ListItem, TextField } from "@mui/material";
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-
-// アイコン関連
-import Icon from '@mdi/react';
-import { mdiSyllabaryHiragana } from '@mdi/js';
-import { mdiIdeogramCjk } from '@mdi/js';
-import { mdiPrinterEye } from '@mdi/js';
-import { mdiListBox } from '@mdi/js';
-import { mdiClose } from '@mdi/js';
-import DeleteIcon from '@mui/icons-material/Delete';
+import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Unstable_Grid2';
+import React from "react";
+import { CREATE_MODE_READ, CREATE_MODE_WRITE, DIVIDERS_PAPER, KEY_SPEED_DIAL_READ, KEY_SPEED_DIAL_WRITE, KEY__NAVIGATION_LIST, KEY__NAVIGATION_PREVIEW, LABEL_NAVIGATION_LIST, LABEL_NAVIGATION_PREVIEW, NAME_SPEED_DIAL_READ, NAME_SPEED_DIAL_WRITE, VALUE_NAVIGATION_LIST, VALUE_NAVIGATION_PREVIEW } from "./Constant";
+import "./styles.css";
 
 export default function App() {
     // ナビゲーション
