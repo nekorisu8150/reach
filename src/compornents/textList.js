@@ -15,6 +15,7 @@ const TextList = (props) => {
                 <Fragment key={item.key}>
                     <ListItemButton>
                         <ListItemText>
+                            {index + 1 + ". "}
                             {item.text.map((_item, _index) => (
                                 <ruby key={_item.key}>
                                     {_item.body}
