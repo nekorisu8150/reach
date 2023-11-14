@@ -1,6 +1,6 @@
 export const DIVIDERS_PAPER = 'paper';
-export const CREATE_MODE_WRITE = '書き';
-export const CREATE_MODE_READ = '読み';
+export const CREATE_MODE_NUMBER_WRITE = 0;
+export const CREATE_MODE_NUMBER_READ = 1;
 
 // value
 export const VALUE_NAVIGATION_LIST = 'list';

@@ -20,8 +20,9 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import React, { Fragment } from "react";
-import { CREATE_MODE_READ, CREATE_MODE_WRITE, DIVIDERS_PAPER, KEY_SPEED_DIAL_READ, KEY_SPEED_DIAL_WRITE, KEY__NAVIGATION_LIST, KEY__NAVIGATION_PREVIEW, LABEL_NAVIGATION_LIST, LABEL_NAVIGATION_PREVIEW, NAME_SPEED_DIAL_READ, NAME_SPEED_DIAL_WRITE, VALUE_NAVIGATION_LIST, VALUE_NAVIGATION_PREVIEW } from "./Constant";
+import { CREATE_MODE_NUMBER_READ, CREATE_MODE_NUMBER_WRITE, DIVIDERS_PAPER, KEY_SPEED_DIAL_READ, KEY_SPEED_DIAL_WRITE, KEY__NAVIGATION_LIST, KEY__NAVIGATION_PREVIEW, LABEL_NAVIGATION_LIST, LABEL_NAVIGATION_PREVIEW, NAME_SPEED_DIAL_READ, NAME_SPEED_DIAL_WRITE, VALUE_NAVIGATION_LIST, VALUE_NAVIGATION_PREVIEW } from "./Constant";
 import "./styles.css";
+import TextList from './compornents/textList';
 
 export default function App() {
     // ナビゲーション
@@ -31,7 +32,7 @@ export default function App() {
     // ダイアログ
     const [openState, setOpenState] = React.useState(false);
     // 作成モード
-    const [createMode, setCreateMode] = React.useState('');
+    const [createMode, setCreateMode] = React.useState(0);
     // 作成中のテキスト
     const [workingTexts, setWorkingTexts] = React.useState([]);
     // 作成済みのテキストリスト
@@ -52,7 +53,7 @@ export default function App() {
      * 作成画面起動(書き)
      * */
     const openDialogWrite = () => {
-        setCreateMode(CREATE_MODE_WRITE);
+        setCreateMode(CREATE_MODE_NUMBER_WRITE);
         openDialog();
     };
 
@@ -60,7 +61,7 @@ export default function App() {
      * 作成画面起動(読み)
      * */
     const openDialogRead = () => {
-        setCreateMode(CREATE_MODE_READ);
+        setCreateMode(CREATE_MODE_NUMBER_READ);
         openDialog();
     };
 
@@ -103,7 +104,7 @@ export default function App() {
     ];
 
     /**
-     * 作成中のテキストペアを追加
+     * テキストペアを追加
      * */
     const addTextPair = () => {
         const newWorkingTexts = [];
@@ -150,10 +151,9 @@ export default function App() {
     const createText = () => {
         const newCreatedTextList = [];
         createdTextList.map(item => newCreatedTextList.push(item));
-        newCreatedTextList.push({ key: Date.now().toString(), text: workingTexts });
+        newCreatedTextList.push({ key: Date.now().toString(), mode: createMode, text: workingTexts });
         setCreatedTextList(newCreatedTextList);
         setWorkingTexts([]);
-        setCreateMode('');
         closeDialog();
         console.log(createdTextList);
     };
@@ -178,7 +178,7 @@ export default function App() {
                     <DialogTitle id="alert-dialog-title">
                         <Grid container>
                             <Grid>
-                                <Typography>問題作成（{createMode}）</Typography>
+                                <Typography>問題作成（{(createMode === 0) ? '書き' : '読み'}）</Typography>
                             </Grid>
                         </Grid>
                     </DialogTitle>
@@ -203,25 +203,7 @@ export default function App() {
                     </DialogActions>
                 </Dialog>
 
-                <List>
-                    {createdTextList.map((item, index) => (
-                        <Fragment key={item.key}>
-                            <ListItemButton>
-                                <ListItemText>
-                                    {item.text.map((_item, _index) => (
-                                        <ruby key={_item.key}>
-                                            {_item.body}
-                                            <rt>
-                                                {_item.yomi}
-                                            </rt>
-                                        </ruby>
-                                    ))}
-                                </ListItemText>
-                            </ListItemButton>
-                            <Divider />
-                        </Fragment>
-                    ))}
-                </List>
+                <TextList list={createdTextList}></TextList>
 
                 <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={15}>
                     <BottomNavigation showLabels
