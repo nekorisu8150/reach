@@ -153,7 +153,7 @@ export default function App() {
         newCreatedTextList.push({ key: Date.now().toString(), text: workingTexts });
         setCreatedTextList(newCreatedTextList);
         setWorkingTexts([]);
-
+        setCreateMode('');
         closeDialog();
         console.log(createdTextList);
     };
@@ -179,8 +179,6 @@ export default function App() {
                         <Grid container>
                             <Grid>
                                 <Typography>問題作成（{createMode}）</Typography>
-                            </Grid>
-                            <Grid>
                             </Grid>
                         </Grid>
                     </DialogTitle>
