@@ -158,6 +158,8 @@ export default function App() {
     return (
         <div className="App">
             <Box>
+                {(createdTextList.length === 0) &&
+                    <Typography>問題が未作成です。右下のボタンから問題を追加してください。</Typography>}
                 <SpeedDial
                     ariaLabel="SpeedDial basic example"
                     sx={{ position: 'absolute', bottom: 70, right: 16 }}

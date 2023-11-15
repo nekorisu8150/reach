@@ -7,13 +7,13 @@ import ListItemText from '@mui/material/ListItemText';
 import React, { Fragment } from "react";
 
 const TextList = (props) => {
-    const { list } = props;
+    const { list, clickEvent } = props;
 
     return (
         <List>
             {list.map((item, index) => (
                 <Fragment key={item.key}>
-                    <ListItemButton>
+                    <ListItemButton onClick={clickEvent}>
                         <ListItemText>
                             {index + 1 + ". "}
                             {item.text.map((_item, _index) => (
