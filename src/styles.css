@@ -1,18 +1,26 @@
 .App {
     font-family: sans-serif;
-    text-align: center;
 }
 
 /*rt {
     border: solid 1px;
 }
 */
+ruby {
+    font: #ff0000;
+}
+#list-box {
+    text-align: center;
+}
 
 #preview-box {
-    /*display: grid;*/
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 3fr;
 }
 
 .preview-area {
-    -ms-writing-mode: tb-rl;
+    min-height: 25vh;
+    min-width: 95vw;
     writing-mode: vertical-rl;
 }
