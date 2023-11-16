@@ -1,4 +1,18 @@
 .App {
-  font-family: sans-serif;
-  text-align: center;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+/*rt {
+    border: solid 1px;
+}
+*/
+
+#preview-box {
+    /*display: grid;*/
+}
+
+.preview-area {
+    -ms-writing-mode: tb-rl;
+    writing-mode: vertical-rl;
 }

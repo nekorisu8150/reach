@@ -1,7 +1,7 @@
 import { mdiIdeogramCjk, mdiListBox, mdiPrinterEye, mdiSyllabaryHiragana } from '@mdi/js';
 import Icon from '@mdi/react';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Button, List, ListItem, TextField } from "@mui/material";
+import { Button, Divider, List, ListItem, TextField } from "@mui/material";
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Box from '@mui/material/Box';
@@ -20,6 +20,7 @@ import React from "react";
 import TextList from './compornents/textList';
 import { CREATE_MODE_NUMBER_READ, CREATE_MODE_NUMBER_WRITE, DIVIDERS_PAPER, KEY_SPEED_DIAL_READ, KEY_SPEED_DIAL_WRITE, KEY__NAVIGATION_LIST, KEY__NAVIGATION_PREVIEW, LABEL_NAVIGATION_LIST, LABEL_NAVIGATION_PREVIEW, NAME_SPEED_DIAL_READ, NAME_SPEED_DIAL_WRITE, VALUE_NAVIGATION_LIST, VALUE_NAVIGATION_PREVIEW } from "./Constant";
 import "./styles.css";
+import Container from '@mui/material/Container';
 
 export default function App() {
     // ナビゲーション
@@ -155,24 +156,14 @@ export default function App() {
         console.log(createdTextList);
     };
 
+    const isListNavigation = () => {
+        return (navigationValue === VALUE_NAVIGATION_LIST);
+    };
+
     return (
         <div className="App">
             <Box>
-                {(createdTextList.length === 0) &&
-                    <Typography>問題が未作成です。右下のボタンから問題を追加してください。</Typography>}
-                <SpeedDial
-                    ariaLabel="SpeedDial basic example"
-                    sx={{ position: 'absolute', bottom: 70, right: 16 }}
-                    icon={<SpeedDialIcon />}>
-                    {actionsSpeedDial.map((action) => (
-                        <SpeedDialAction
-                            key={action.key}
-                            icon={action.icon}
-                            tooltipTitle={action.name}
-                            onClick={action.clickEvent} />
-                    ))}
-                </SpeedDial>
-
+                {/* 共通UI */}
                 <Dialog open={openState} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" scroll={scroll}>
                     <DialogTitle id="alert-dialog-title">
                         <Grid container>
@@ -202,8 +193,7 @@ export default function App() {
                     </DialogActions>
                 </Dialog>
 
-                <TextList list={createdTextList}></TextList>
-
+                {/* ナビゲーション */}
                 <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={15}>
                     <BottomNavigation showLabels
                         value={navigationValue}
@@ -215,6 +205,99 @@ export default function App() {
                         ))}
                     </BottomNavigation>
                 </Paper>
+
+                {/* 一覧表示 */}
+                {(isListNavigation()) &&
+                    (
+                        <Box>
+                            {(createdTextList.length === 0) &&
+                                <Typography>問題が未作成です。右下のボタンから問題を追加してください。</Typography>}
+                            <SpeedDial
+                                ariaLabel="SpeedDial basic example"
+                                sx={{ position: 'absolute', bottom: 70, right: 16 }}
+                                icon={<SpeedDialIcon />}>
+                                {actionsSpeedDial.map((action) => (
+                                    <SpeedDialAction
+                                        key={action.key}
+                                        icon={action.icon}
+                                        tooltipTitle={action.name}
+                                        onClick={action.clickEvent} />
+                                ))}
+                            </SpeedDial>
+                            <TextList list={createdTextList}></TextList>
+                        </Box>
+                    )
+                }
+
+                {/* プレビュー表示 */}
+                {(!isListNavigation()) &&
+                    (
+                        <Box id="preview-box">
+                            <Container className="preview-area">
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                            </Container>
+                            <Divider />
+                            <Container className="preview-area">
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                            </Container>
+                            <Divider />
+                            <Container className="preview-area">
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                            </Container>
+                        </Box>
+                    )
+                }
             </Box>
         </div>
     );

@@ -19,9 +19,7 @@ const TextList = (props) => {
                             {item.text.map((_item, _index) => (
                                 <ruby key={_item.key}>
                                     {_item.body}
-                                    <rt>
-                                        {_item.yomi}
-                                    </rt>
+                                    {(_item.yomi !== "") && <rt>{_item.yomi}</rt>}
                                 </ruby>
                             ))}
                         </ListItemText>
