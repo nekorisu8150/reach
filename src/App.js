@@ -16,11 +16,11 @@ import SpeedDialAction from '@mui/material/SpeedDialAction';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
-import React from "react";
+import React, { useState } from "react";
 import TextList from './compornents/textList';
 import { CREATE_MODE_NUMBER_READ, CREATE_MODE_NUMBER_WRITE, DIVIDERS_PAPER, KEY_SPEED_DIAL_READ, KEY_SPEED_DIAL_WRITE, KEY__NAVIGATION_LIST, KEY__NAVIGATION_PREVIEW, LABEL_NAVIGATION_LIST, LABEL_NAVIGATION_PREVIEW, NAME_SPEED_DIAL_READ, NAME_SPEED_DIAL_WRITE, VALUE_NAVIGATION_LIST, VALUE_NAVIGATION_PREVIEW } from "./Constant";
-import "./styles.css";
-import Container from '@mui/material/Container';
+import dummyCreatedList from './dummy/dummy';
+import "./styles/styles.css";
 
 export default function App() {
     // ナビゲーション
@@ -156,15 +156,23 @@ export default function App() {
         console.log(createdTextList);
     };
 
+
+
     const isListNavigation = () => {
         return (navigationValue === VALUE_NAVIGATION_LIST);
     };
+
+    const [first, setFirst] = useState(true);
+    if (first) {
+        first && setCreatedTextList(dummyCreatedList);
+        setFirst(false);
+    }
 
     return (
         <div className="App">
             <Box>
                 {/* 共通UI */}
-                <Dialog open={openState} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" scroll={scroll}>
+                <Dialog id="dialog" open={openState} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" scroll={scroll}>
                     <DialogTitle id="alert-dialog-title">
                         <Grid container>
                             <Grid>
@@ -194,7 +202,7 @@ export default function App() {
                 </Dialog>
 
                 {/* ナビゲーション */}
-                <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={15}>
+                <Paper id="navigation" sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={15}>
                     <BottomNavigation showLabels
                         value={navigationValue}
                         onChange={(event, newValue) => {
@@ -209,7 +217,7 @@ export default function App() {
                 {/* 一覧表示 */}
                 {(isListNavigation()) &&
                     (
-                        <Box>
+                        <Box id="list-box">
                             {(createdTextList.length === 0) &&
                                 <Typography>問題が未作成です。右下のボタンから問題を追加してください。</Typography>}
                             <SpeedDial
@@ -233,7 +241,7 @@ export default function App() {
                 {(!isListNavigation()) &&
                     (
                         <Box id="preview-box">
-                            <Container className="preview-area">
+                            <Box className="preview-area">
                                 <Typography>
                                     <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
                                 </Typography>
@@ -243,18 +251,9 @@ export default function App() {
                                 <Typography>
                                     <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
                                 </Typography>
-                                <Typography>
-                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                                </Typography>
-                                <Typography>
-                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                                </Typography>
-                                <Typography>
-                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                                </Typography>
-                            </Container>
+                            </Box>
                             <Divider />
-                            <Container className="preview-area">
+                            <Box className="preview-area">
                                 <Typography>
                                     <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
                                 </Typography>
@@ -264,18 +263,9 @@ export default function App() {
                                 <Typography>
                                     <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
                                 </Typography>
-                                <Typography>
-                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                                </Typography>
-                                <Typography>
-                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                                </Typography>
-                                <Typography>
-                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                                </Typography>
-                            </Container>
+                            </Box>
                             <Divider />
-                            <Container className="preview-area">
+                            <Box className="preview-area">
                                 <Typography>
                                     <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
                                 </Typography>
@@ -294,7 +284,16 @@ export default function App() {
                                 <Typography>
                                     <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
                                 </Typography>
-                            </Container>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                                <Typography>
+                                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
+                                </Typography>
+                            </Box>
                         </Box>
                     )
                 }
