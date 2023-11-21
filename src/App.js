@@ -222,7 +222,7 @@ export default function App() {
                                 <Typography>問題が未作成です。右下のボタンから問題を追加してください。</Typography>}
                             <SpeedDial
                                 ariaLabel="SpeedDial basic example"
-                                sx={{ position: 'absolute', bottom: 70, right: 16 }}
+                                sx={{ position: 'fixed', bottom: 70, right: 16 }}
                                 icon={<SpeedDialIcon />}>
                                 {actionsSpeedDial.map((action) => (
                                     <SpeedDialAction
