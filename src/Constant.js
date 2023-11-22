@@ -1,6 +1,8 @@
 export const DIVIDERS_PAPER = 'paper';
 export const CREATE_MODE_NUMBER_WRITE = 0;
 export const CREATE_MODE_NUMBER_READ = 1;
+export const CREATE_MODE_CLASS_NAME_WRITE = 'write';
+export const CREATE_MODE_CLASS_NAME_READ = 'read';
 
 // value
 export const VALUE_NAVIGATION_LIST = 'list';
