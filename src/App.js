@@ -1,3 +1,4 @@
+import AppBar from '@mui/material/AppBar';
 import { mdiIdeogramCjk, mdiListBox, mdiPrinterEye, mdiSyllabaryHiragana } from '@mdi/js';
 import Icon from '@mdi/react';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -170,7 +171,13 @@ export default function App() {
 
     return (
         <div className="App">
-            <Box>
+            <Box id="app-bar">
+                <Typography variant="h4">
+                    Reach
+                </Typography>
+                <Typography>問題数 {createdTextList.length}問</Typography>
+            </Box>
+            <Box id="content">
                 {/* 共通UI */}
                 <Dialog id="dialog" open={openState} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" scroll={scroll}>
                     <DialogTitle id="alert-dialog-title">
@@ -201,18 +208,6 @@ export default function App() {
                     </DialogActions>
                 </Dialog>
 
-                {/* ナビゲーション */}
-                <Paper id="navigation" sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={15}>
-                    <BottomNavigation showLabels
-                        value={navigationValue}
-                        onChange={(event, newValue) => {
-                            setNavigationValue(newValue);
-                        }}>
-                        {actionsNavigation.map((action) => (
-                            <BottomNavigationAction label={action.label} icon={action.icon} key={action.key} value={action.value} />
-                        ))}
-                    </BottomNavigation>
-                </Paper>
 
                 {/* 一覧表示 */}
                 {(isListNavigation()) &&
@@ -220,6 +215,7 @@ export default function App() {
                         <Box id="list-box">
                             {(createdTextList.length === 0) &&
                                 <Typography>問題が未作成です。右下のボタンから問題を追加してください。</Typography>}
+                            <TextList list={createdTextList}></TextList>
                             <SpeedDial
                                 ariaLabel="SpeedDial basic example"
                                 sx={{ position: 'fixed', bottom: 70, right: 16 }}
@@ -232,7 +228,6 @@ export default function App() {
                                         onClick={action.clickEvent} />
                                 ))}
                             </SpeedDial>
-                            <TextList list={createdTextList}></TextList>
                         </Box>
                     )
                 }
@@ -297,6 +292,20 @@ export default function App() {
                         </Box>
                     )
                 }
+            </Box>
+            {/* ナビゲーション */}
+            <Box id="navigation" >
+                <Paper elevation={15}>
+                    <BottomNavigation showLabels
+                        value={navigationValue}
+                        onChange={(event, newValue) => {
+                            setNavigationValue(newValue);
+                        }}>
+                        {actionsNavigation.map((action) => (
+                            <BottomNavigationAction label={action.label} icon={action.icon} key={action.key} value={action.value} />
+                        ))}
+                    </BottomNavigation>
+                </Paper>
             </Box>
         </div>
     );
