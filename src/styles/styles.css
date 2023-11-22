@@ -10,6 +10,22 @@ ruby {
     font: #ff0000;
 }
 
+#app-bar {
+    text-align: center;
+}
+
+#content {
+    height: 66vh;
+    overflow: scroll; /* important */
+}
+
+#navigation {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
 #list-box {
     text-align: center;
 }
