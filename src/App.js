@@ -235,7 +235,7 @@ export default function App() {
                 {/* プレビュー表示 */}
                 {(!isListNavigation()) &&
                     (
-                        <Preview></Preview>
+                        <Preview list={createdTextList}></Preview>
                     )
                 }
             </Box>

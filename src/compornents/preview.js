@@ -1,67 +1,52 @@
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Unstable_Grid2';
 import React from "react";
 
 const Preview = (props) => {
     const { list, clickEvent } = props;
+    const listFirst = [];
+    const listSecond = [];
+
+    for (let i = 0; i < list.length; i++) {
+        if (i < 10) {
+            listFirst[i] = list[i];
+        } else {
+            listSecond[i % 10] = list[i];
+        }
+    }
 
     return (
-        <Box id="preview-box">
+        <Grid container id="preview-box">
             <Box className="preview-area">
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
+                {listFirst.map((item, index) => (
+                    <Typography key={item.key}>
+                        {index + 1 + ". "}
+                        {item.text.map((_item, _index) => (
+                            <ruby key={_item.key}>
+                                {_item.body}
+                                {(_item.yomi !== "") && <rt>{_item.yomi}</rt>}
+                            </ruby>
+                        ))}
+                    </Typography>
+                ))}
             </Box>
-            <Divider />
+            <Divider orientation="vertical" flexItem />
             <Box className="preview-area">
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
+                {listSecond.map((item, index) => (
+                    <Typography key={item.key}>
+                        {index + 1 + ". "}
+                        {item.text.map((_item, _index) => (
+                            <ruby key={_item.key}>
+                                {_item.body}
+                                {(_item.yomi !== "") && <rt>{_item.yomi}</rt>}
+                            </ruby>
+                        ))}
+                    </Typography>
+                ))}
             </Box>
-            <Divider />
-            <Box className="preview-area">
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
-                <Typography>
-                    <ruby>いい<rt></rt></ruby><ruby>天気<rt>てんき</rt></ruby><ruby>ですね<rt></rt></ruby>
-                </Typography>
-            </Box>
-        </Box>
+        </Grid>
     );
 };
 

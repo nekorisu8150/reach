@@ -31,25 +31,13 @@ ruby {
 }
 
 #preview-box {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 3fr;
 }
 
 .preview-area {
-    min-height: 40vh;
-    min-width: 95vw;
-    writing-mode: vertical-rl;
-    display: grid;
-    /*grid-template-columns: 2fr;*/
 }
 
 @media print {
-    #list-box, #navigation {
+    #list-box, #navigation, #app-bar {
         display: none;
-    }
-
-    #preview-box {
-        background: #ff0000;
     }
 }
