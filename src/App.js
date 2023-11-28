@@ -29,7 +29,9 @@ export default function App() {
     // ダイアログのスクロール
     const [scroll, setScroll] = React.useState('paper');
     // ダイアログ
-    const [openState, setOpenState] = React.useState(false);
+    const [openStateDialog, setOpenStateDialog] = React.useState(false);
+    // スピードダイヤル
+    const [openStateSpeedDial, setOpenStateSpeedDial] = React.useState(false);
     // 作成モード
     const [createMode, setCreateMode] = React.useState(0);
     // 作成中のテキスト
@@ -37,15 +39,34 @@ export default function App() {
     // 作成済みのテキストリスト
     const [createdTextList, setCreatedTextList] = React.useState([]);
 
-    // 作成ダイアログを表示
+    /**
+     * 作成ダイアログを表示
+     * */
     const openDialog = () => {
         addTextPair();
-        setOpenState(true);
+        setOpenStateDialog(true);
+        closeSpeedDial();
     };
 
-    // 作成ダイアログ 閉じる
+    /**
+     * 作成ダイアログ 閉じる
+     * */
     const closeDialog = () => {
-        setOpenState(false);
+        setOpenStateDialog(false);
+    };
+
+    /**
+     * スピードダイヤル開閉切替
+     * */
+    const switchOpenStateSpeedDial = () => {
+        setOpenStateSpeedDial(!openStateSpeedDial);
+    };
+
+    /**
+     * スピードダイヤル 閉じる
+     * */
+    const closeSpeedDial = () => {
+        setOpenStateSpeedDial(false);
     };
 
     /**
@@ -179,7 +200,7 @@ export default function App() {
             </Box>
             <Box id="content">
                 {/* 共通UI */}
-                <Dialog id="dialog" open={openState} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" scroll={scroll}>
+                <Dialog id="dialog" open={openStateDialog} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" scroll={scroll}>
                     <DialogTitle id="alert-dialog-title">
                         <Grid container>
                             <Grid>
@@ -219,6 +240,8 @@ export default function App() {
                             <SpeedDial
                                 ariaLabel="SpeedDial basic example"
                                 sx={{ position: 'fixed', bottom: 70, right: 16 }}
+                                onClick={switchOpenStateSpeedDial}
+                                open={openStateSpeedDial}
                                 icon={<SpeedDialIcon />}>
                                 {actionsSpeedDial.map((action) => (
                                     <SpeedDialAction
