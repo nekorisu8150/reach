@@ -33,8 +33,13 @@ ruby {
 }
 
 .preview-area {
+    padding-left: 10px;
     width: 45vw;
     margin-top: 5px;
+}
+
+.text {
+    font-size: 10px; /* スマホ用 */
 }
 
 @media print {
@@ -51,5 +56,9 @@ ruby {
 
     .preview-area {
         width: 100mm;
+    }
+
+    .text {
+        font-size: 14px;
     }
 }

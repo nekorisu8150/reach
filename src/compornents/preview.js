@@ -27,7 +27,7 @@ const Preview = (props) => {
         <Grid container id="preview-box">
             <Box className="preview-area">
                 {listFirst.map((item, index) => (
-                    <Typography key={item.key}>
+                    <p key={item.key} className="text">
                         {index + 1 + ". "}
                         {item.text.map((_item, _index) => (
                             <ruby key={_item.key}>
@@ -35,13 +35,13 @@ const Preview = (props) => {
                                 {(_item.yomi !== "") && <rt>{_item.yomi}</rt>}
                             </ruby>
                         ))}
-                    </Typography>
+                    </p>
                 ))}
             </Box>
             <Divider orientation="vertical" flexItem />
             <Box className="preview-area">
                 {listSecond.map((item, index) => (
-                    <Typography key={item.key}>
+                    <p key={item.key} className="text">
                         {index + half + 1 + ". "}
                         {item.text.map((_item, _index) => (
                             <ruby key={_item.key}>
@@ -49,7 +49,7 @@ const Preview = (props) => {
                                 {(_item.yomi !== "") && <rt>{_item.yomi}</rt>}
                             </ruby>
                         ))}
-                    </Typography>
+                    </p>
                 ))}
             </Box>
         </Grid>
