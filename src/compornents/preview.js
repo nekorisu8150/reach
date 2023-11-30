@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import React from "react";
 import RubyText from './rubyText';
