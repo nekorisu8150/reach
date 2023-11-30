@@ -4,16 +4,22 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import React from "react";
 
+const max = 50;
+const half = max / 2;
+
 const Preview = (props) => {
     const { list, clickEvent } = props;
     const listFirst = [];
     const listSecond = [];
 
     for (let i = 0; i < list.length; i++) {
-        if (i < 10) {
+        if (i === max) {
+            break;
+        }
+        if (i < half) {
             listFirst[i] = list[i];
         } else {
-            listSecond[i % 10] = list[i];
+            listSecond[i % half] = list[i];
         }
     }
 
