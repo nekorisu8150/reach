@@ -42,7 +42,7 @@ const Preview = (props) => {
             <Box className="preview-area">
                 {listSecond.map((item, index) => (
                     <Typography key={item.key}>
-                        {index + 1 + ". "}
+                        {index + half + 1 + ". "}
                         {item.text.map((_item, _index) => (
                             <ruby key={_item.key}>
                                 {_item.body}
