@@ -3,6 +3,7 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import React from "react";
+import RubyText from './rubyText';
 
 const max = 50;
 const half = max / 2;
@@ -26,31 +27,13 @@ const Preview = (props) => {
     return (
         <Grid container id="preview-box">
             <Box className="preview-area">
-                {listFirst.map((item, index) => (
-                    <p key={item.key} className="text">
-                        {index + 1 + ". "}
-                        {item.text.map((_item, _index) => (
-                            <ruby key={_item.key}>
-                                {_item.body}
-                                {(_item.yomi !== "") && <rt>{_item.yomi}</rt>}
-                            </ruby>
-                        ))}
-                    </p>
-                ))}
+                <RubyText list={listFirst} startIndex={1}></RubyText>
             </Box>
             <Divider orientation="vertical" flexItem />
             <Box className="preview-area">
-                {listSecond.map((item, index) => (
-                    <p key={item.key} className="text">
-                        {index + half + 1 + ". "}
-                        {item.text.map((_item, _index) => (
-                            <ruby key={_item.key}>
-                                {_item.body}
-                                {(_item.yomi !== "") && <rt>{_item.yomi}</rt>}
-                            </ruby>
-                        ))}
-                    </p>
-                ))}
+                <Box className="preview-area">
+                    <RubyText list={listSecond} startIndex={half + 1}></RubyText>
+                </Box>
             </Box>
         </Grid>
     );
