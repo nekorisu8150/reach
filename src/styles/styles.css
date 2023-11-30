@@ -14,8 +14,8 @@ ruby {
 }
 
 #content {
-    height: 66vh;
-    overflow: scroll; /* important */
+    height: 85vh;
+    overflow-y: scroll; /* important */
 }
 
 #navigation {
@@ -38,8 +38,16 @@ ruby {
     margin-top: 5px;
 }
 
-.text {
-    font-size: 10px; /* スマホ用 */
+@media screen and (max-width: 480px) {
+    /* 480px以下に適用されるCSS（スマホ用） */
+
+    #content {
+        height: 66vh;
+    }
+
+    .text {
+        font-size: 10px;
+    }
 }
 
 @media print {
