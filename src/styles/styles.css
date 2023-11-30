@@ -2,13 +2,6 @@
     font-family: sans-serif;
 }
 
-/*rt {
-    border: solid 1px;
-}
-*/
-ruby {
-}
-
 #app-bar {
     text-align: center;
 }
@@ -38,6 +31,15 @@ ruby {
     margin-top: 5px;
 }
 
+.rb-write, .rb-read {
+    font-size: 22px;
+    margin: auto 5px;
+}
+
+.rt-write, rt-read {
+    font-size: 12px;
+}
+
 @media screen and (max-width: 480px) {
     /* 480px以下に適用されるCSS（スマホ用） */
 
@@ -48,9 +50,21 @@ ruby {
     .text {
         font-size: 10px;
     }
+
+    .rb-write, .rb-read {
+        font-size: 14px;
+    }
+
+    .rt-write, rt-read {
+        font-size: 7px;
+    }
 }
 
 @media print {
+    @page {
+        margin: 0;
+    }
+
     #list-box, #navigation, #app-bar {
         display: none;
     }
@@ -68,5 +82,13 @@ ruby {
 
     .text {
         font-size: 14px;
+    }
+
+    .rb-write, .rb-read {
+        font-size: 18px;
+    }
+
+    .rt-write, rt-read {
+        font-size: 10px;
     }
 }
