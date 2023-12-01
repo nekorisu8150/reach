@@ -22,7 +22,8 @@
     text-align: center;
 }
 
-#preview-box {
+.sign {
+    text-decoration: underline;
 }
 
 .preview-area {
