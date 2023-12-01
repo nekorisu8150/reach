@@ -4,7 +4,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import React from "react";
 import RubyText from './rubyText';
 
-const max = 50;
+const max = 40;
 const half = max / 2;
 
 const Preview = (props) => {
