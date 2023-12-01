@@ -24,17 +24,20 @@ const Preview = (props) => {
     }
 
     return (
-        <Grid container id="preview-box">
-            <Box className="preview-area">
-                <RubyText list={listFirst} startIndex={1}></RubyText>
-            </Box>
-            <Divider orientation="vertical" flexItem />
-            <Box className="preview-area">
+        <>
+            <p className="sign">{"名前　　　　　　　　　　　　"}</p>
+            <Grid container id="preview-box">
                 <Box className="preview-area">
-                    <RubyText list={listSecond} startIndex={half + 1}></RubyText>
+                    <RubyText list={listFirst} startIndex={1}></RubyText>
                 </Box>
-            </Box>
-        </Grid>
+                <Divider orientation="vertical" flexItem />
+                <Box className="preview-area">
+                    <Box className="preview-area">
+                        <RubyText list={listSecond} startIndex={half + 1}></RubyText>
+                    </Box>
+                </Box>
+            </Grid>
+        </>
     );
 };
 
