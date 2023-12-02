@@ -201,7 +201,7 @@ export default function App() {
                 <Typography>問題数 {createdTextList.length}問</Typography>
             </Box>
             {/* 共通UI */}
-            <Dialog id="dialog-create" open={openStateDialogCreate} aria-labelledby="dialog-title" aria-describedby="-dialog-description" scroll={scroll}>
+            <Dialog id="dialog-create" open={openStateDialogCreate} aria-labelledby="dialog-title" aria-describedby="dialog-description" scroll={scroll}>
                 <DialogTitle id="alert-dialog-title">
                     <Grid container>
                         <Grid>
