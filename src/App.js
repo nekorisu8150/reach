@@ -28,8 +28,10 @@ export default function App() {
     const [navigationValue, setNavigationValue] = React.useState(VALUE_NAVIGATION_LIST);
     // ダイアログのスクロール
     const [scroll, setScroll] = React.useState('paper');
-    // ダイアログ
-    const [openStateDialog, setOpenStateDialog] = React.useState(false);
+    // 作成ダイアログ表示状態
+    const [openStateDialogCreate, setOpenStateDialogCreate] = React.useState(false);
+    // 編集ダイアログ表示状態
+    const [openStateDialogEdit, setOpenStateDialogEdit] = React.useState(false);
     // スピードダイヤル
     const [openStateSpeedDial, setOpenStateSpeedDial] = React.useState(false);
     // 作成モード
@@ -44,7 +46,7 @@ export default function App() {
      * */
     const openDialog = () => {
         addTextPair();
-        setOpenStateDialog(true);
+        setOpenStateDialogCreate(true);
         closeSpeedDial();
     };
 
@@ -52,7 +54,7 @@ export default function App() {
      * 作成ダイアログ 閉じる
      * */
     const closeDialog = () => {
-        setOpenStateDialog(false);
+        setOpenStateDialogCreate(false);
     };
 
     /**
@@ -198,38 +200,37 @@ export default function App() {
                 </Typography>
                 <Typography>問題数 {createdTextList.length}問</Typography>
             </Box>
-            <Box id="content">
-                {/* 共通UI */}
-                <Dialog id="dialog" open={openStateDialog} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" scroll={scroll}>
-                    <DialogTitle id="alert-dialog-title">
-                        <Grid container>
-                            <Grid>
-                                <Typography>問題作成（{(createMode === 0) ? '書き' : '読み'}）</Typography>
-                            </Grid>
+            {/* 共通UI */}
+            <Dialog id="dialog-create" open={openStateDialogCreate} aria-labelledby="dialog-title" aria-describedby="-dialog-description" scroll={scroll}>
+                <DialogTitle id="alert-dialog-title">
+                    <Grid container>
+                        <Grid>
+                            <Typography>問題作成（{(createMode === 0) ? '書き' : '読み'}）</Typography>
                         </Grid>
-                    </DialogTitle>
-                    <DialogContent id="alert-dialog-description" dividers={scroll === DIVIDERS_PAPER}>
-                        <List>
-                            {workingTexts.map((item, index) => (
-                                <ListItem key={item.key}>
-                                    <IconButton aria-label="delete" color="primary" onClick={() => removeTextPair(index)}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                    {/*<Button variant="contained" startIcon={<DeleteIcon />}></Button>*/}
-                                    <TextField id="filled-basic" label="本文" variant="filled" onChange={(event) => editTextPair(index, 0, event.target.value)} />
-                                    <TextField id="filled-basic" label="ふりがな" variant="filled" onChange={(event) => editTextPair(index, 1, event.target.value)} />
-                                </ListItem>
-                            ))}
-                        </List>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button variant="contained" onClick={addTextPair}>追加</Button>
-                        <Button variant="contained" onClick={cancelDialog}>キャンセル</Button>
-                        <Button variant="contained" onClick={createText}>作成</Button>
-                    </DialogActions>
-                </Dialog>
+                    </Grid>
+                </DialogTitle>
+                <DialogContent id="alert-dialog-description" dividers={scroll === DIVIDERS_PAPER}>
+                    <List>
+                        {workingTexts.map((item, index) => (
+                            <ListItem key={item.key}>
+                                <IconButton aria-label="delete" color="primary" disabled={index === 0} onClick={() => removeTextPair(index)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                                {/*<Button variant="contained" startIcon={<DeleteIcon />}></Button>*/}
+                                <TextField id="filled-basic" label="本文" variant="filled" onChange={(event) => editTextPair(index, 0, event.target.value)} />
+                                <TextField id="filled-basic" label="ふりがな" variant="filled" onChange={(event) => editTextPair(index, 1, event.target.value)} />
+                            </ListItem>
+                        ))}
+                    </List>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="contained" onClick={addTextPair}>追加</Button>
+                    <Button variant="contained" onClick={cancelDialog}>キャンセル</Button>
+                    <Button variant="contained" onClick={createText}>作成</Button>
+                </DialogActions>
+            </Dialog>
 
-
+            <Box id="content">
                 {/* 一覧表示 */}
                 {(isListNavigation()) &&
                     (
