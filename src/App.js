@@ -1,5 +1,6 @@
-import { mdiIdeogramCjk, mdiListBox, mdiPrinterEye, mdiSyllabaryHiragana } from '@mdi/js';
+import { mdiExport, mdiIdeogramCjk, mdiImport, mdiListBox, mdiPrinterEye, mdiSyllabaryHiragana } from '@mdi/js';
 import Icon from '@mdi/react';
+import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button, List, ListItem, TextField } from "@mui/material";
 import BottomNavigation from '@mui/material/BottomNavigation';
@@ -11,6 +12,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
+import Snackbar from '@mui/material/Snackbar';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
@@ -19,7 +21,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import React, { useState } from "react";
 import Preview from './compornents/preview';
 import TextList from './compornents/textList';
-import { CREATE_MODE_NUMBER_READ, CREATE_MODE_NUMBER_WRITE, DIVIDERS_PAPER, KEY_SPEED_DIAL_READ, KEY_SPEED_DIAL_WRITE, KEY__NAVIGATION_LIST, KEY__NAVIGATION_PREVIEW, LABEL_NAVIGATION_LIST, LABEL_NAVIGATION_PREVIEW, NAME_SPEED_DIAL_READ, NAME_SPEED_DIAL_WRITE, VALUE_NAVIGATION_LIST, VALUE_NAVIGATION_PREVIEW } from "./Constant";
+import { CREATE_MODE_NUMBER_READ, CREATE_MODE_NUMBER_WRITE, DIVIDERS_PAPER, KEY_SPEED_DIAL_EXPORT, KEY_SPEED_DIAL_IMPORT, KEY_SPEED_DIAL_READ, KEY_SPEED_DIAL_WRITE, KEY__NAVIGATION_LIST, KEY__NAVIGATION_PREVIEW, LABEL_NAVIGATION_LIST, LABEL_NAVIGATION_PREVIEW, NAME_SPEED_DIAL_EXPORT, NAME_SPEED_DIAL_IMPORT, NAME_SPEED_DIAL_READ, NAME_SPEED_DIAL_WRITE, VALUE_NAVIGATION_LIST, VALUE_NAVIGATION_PREVIEW } from "./Constant";
 import dummyCreatedList from './dummy/dummy';
 import "./styles/styles.css";
 
@@ -40,6 +42,10 @@ export default function App() {
     const [workingTexts, setWorkingTexts] = React.useState([]);
     // 作成済みのテキストリスト
     const [createdTextList, setCreatedTextList] = React.useState([]);
+    // スナックバー表示状態
+    const [openStateSnackbar, setOpenStateSnackbar] = React.useState(false);
+    // スナックバーメッセージ
+    const [messageSnackbar, setMessageSnackbar] = React.useState('');
 
     /**
      * 作成ダイアログを表示
@@ -93,6 +99,61 @@ export default function App() {
         closeDialog();
     };
 
+    /**
+     * スナックバーを閉じる
+     * */
+    const closeSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenStateSnackbar(false);
+    };
+
+    /**
+     * 問題をreachファイルに保存する
+     * */
+    const saveAsFile = () => {
+        try {
+            const a = document.createElement('a');
+            const fileName = 'test.reach';
+            const blobData = new Blob([JSON.stringify(createdTextList, null, 4)], {
+                type: 'text/json',
+            });
+            const jsonURL = URL.createObjectURL(blobData);
+            a.href = jsonURL;
+            a.download = fileName;
+            a.click();
+        } catch (e) {
+            setMessageSnackbar('ファイルの保存に失敗しました');
+            setOpenStateSnackbar(true);
+        }
+    };
+
+    /**
+     * reachファイルから問題を読み込む
+     * */
+    const importFromFile = () => {
+        try {
+            const reader = new FileReader();
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.reach';
+            input.addEventListener('change', () => {
+                //Fileオブジェクト(テキストファイル)のファイル内容を読み込む
+                reader.readAsText(input.files[0], 'UTF-8');
+                reader.onload = () => {
+                    const result = JSON.parse(reader.result);
+                    setCreatedTextList(result);
+                };
+            });
+            input.click();
+        } catch (e) {
+            setMessageSnackbar('ファイルの読込に失敗しました');
+            setOpenStateSnackbar(true);
+        }
+    };
+
     // ナビゲーション
     const actionsNavigation = [
         {
@@ -123,7 +184,32 @@ export default function App() {
             key: KEY_SPEED_DIAL_READ,
             clickEvent: openDialogRead
         },
+        {
+            icon: <Icon path={mdiImport} size={3} />,
+            name: NAME_SPEED_DIAL_IMPORT,
+            key: KEY_SPEED_DIAL_IMPORT,
+            clickEvent: importFromFile
+        },
+        {
+            icon: <Icon path={mdiExport} size={3} />,
+            name: NAME_SPEED_DIAL_EXPORT,
+            key: KEY_SPEED_DIAL_EXPORT,
+            clickEvent: saveAsFile
+        },
     ];
+
+    // スナックバー
+    const actionSnackbar = (
+        <>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={closeSnackbar}>
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </>
+    );
 
     /**
      * テキストペアを追加
@@ -180,8 +266,6 @@ export default function App() {
         console.log(createdTextList);
     };
 
-
-
     const isListNavigation = () => {
         return (navigationValue === VALUE_NAVIGATION_LIST);
     };
@@ -194,22 +278,22 @@ export default function App() {
 
     return (
         <div className="App">
+            {/* 共通UI */}
             <Box id="app-bar">
                 <Typography variant="h4">
                     Reach
                 </Typography>
                 <Typography>問題数 {createdTextList.length}問</Typography>
             </Box>
-            {/* 共通UI */}
-            <Dialog id="dialog-create" open={openStateDialogCreate} aria-labelledby="dialog-title" aria-describedby="dialog-description" scroll={scroll}>
-                <DialogTitle id="alert-dialog-title">
+            <Dialog id="dialog-create" open={openStateDialogCreate} aria-labelledby="dialog-title-create" aria-describedby="dialog-description-create" scroll={scroll}>
+                <DialogTitle id="dialog-title-create">
                     <Grid container>
                         <Grid>
                             <Typography>問題作成（{(createMode === 0) ? '書き' : '読み'}）</Typography>
                         </Grid>
                     </Grid>
                 </DialogTitle>
-                <DialogContent id="alert-dialog-description" dividers={scroll === DIVIDERS_PAPER}>
+                <DialogContent id="dialog-description-create" dividers={scroll === DIVIDERS_PAPER}>
                     <List>
                         {workingTexts.map((item, index) => (
                             <ListItem key={item.key}>
@@ -229,6 +313,12 @@ export default function App() {
                     <Button variant="contained" onClick={createText}>作成</Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar
+                open={openStateSnackbar}
+                autoHideDuration={6000}
+                onClose={closeSnackbar}
+                message={messageSnackbar}
+                action={actionSnackbar}/>
 
             <Box id="content">
                 {/* 一覧表示 */}
