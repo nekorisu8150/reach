@@ -17,7 +17,12 @@ export const KEY__NAVIGATION_LIST = 'List';
 export const KEY__NAVIGATION_PREVIEW = 'Preview';
 export const KEY_SPEED_DIAL_WRITE = 'Write';
 export const KEY_SPEED_DIAL_READ = 'Read';
+export const KEY_SPEED_DIAL_EXPORT = 'export';
+export const KEY_SPEED_DIAL_IMPORT = 'import';
 
 // name
 export const NAME_SPEED_DIAL_WRITE = '書き';
 export const NAME_SPEED_DIAL_READ = '読み';
+export const NAME_SPEED_DIAL_EXPORT = 'ファイルに保存';
+export const NAME_SPEED_DIAL_IMPORT = 'ファイルを読み込む';
+
