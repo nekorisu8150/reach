@@ -33,7 +33,7 @@ export default function App() {
     // 作成ダイアログ表示状態
     const [openStateDialogCreate, setOpenStateDialogCreate] = React.useState(false);
     // 編集ダイアログ表示状態
-    const [openStateDialogEdit, setOpenStateDialogEdit] = React.useState(false);
+    const [openStateDialogConfirm, setOpenStateDialogConfirm] = React.useState(false);
     // スピードダイヤル
     const [openStateSpeedDial, setOpenStateSpeedDial] = React.useState(false);
     // 作成モード
@@ -46,11 +46,13 @@ export default function App() {
     const [openStateSnackbar, setOpenStateSnackbar] = React.useState(false);
     // スナックバーメッセージ
     const [messageSnackbar, setMessageSnackbar] = React.useState('');
+    // 選択されたリスト
+    const [selectedListIndex, setSelectedListIndex] = React.useState(null);
 
     /**
      * 作成ダイアログを表示
      * */
-    const openDialog = () => {
+    const openDialogCreate = () => {
         addTextPair();
         setOpenStateDialogCreate(true);
         closeSpeedDial();
@@ -59,8 +61,19 @@ export default function App() {
     /**
      * 作成ダイアログ 閉じる
      * */
-    const closeDialog = () => {
+    const closeDialogCreate = () => {
         setOpenStateDialogCreate(false);
+    };
+
+    /**
+     * 編集ダイアログを表示
+     * */
+    const openDialogConfirm = () => {
+        setOpenStateDialogConfirm(true);
+    };
+
+    const closeDialogConfirm = () => {
+        setOpenStateDialogConfirm(false);
     };
 
     /**
@@ -82,7 +95,7 @@ export default function App() {
      * */
     const openDialogWrite = () => {
         setCreateMode(CREATE_MODE_NUMBER_WRITE);
-        openDialog();
+        openDialogCreate();
     };
 
     /**
@@ -90,13 +103,33 @@ export default function App() {
      * */
     const openDialogRead = () => {
         setCreateMode(CREATE_MODE_NUMBER_READ);
-        openDialog();
+        openDialogCreate();
     };
 
     // 作成ダイアログ キャンセル
-    const cancelDialog = () => {
+    const cancelDialogCreate = () => {
         setWorkingTexts([]);
-        closeDialog();
+        closeDialogCreate();
+    };
+
+    /**
+     * 確認ダイアログ キャンセル
+     * */
+    const cancelDialogConfirm = () => {
+        setSelectedListIndex(null);
+        closeDialogConfirm();
+    };
+
+    /**
+     * 選択したアイテムを削除
+     * @param {any} idx
+     */
+    const removeSelectedItem = () => {
+        const newList = [];
+        createdTextList.map(item => newList.push(item));
+        newList.splice(selectedListIndex, 1);
+        setCreatedTextList(newList);
+        closeDialogConfirm();
     };
 
     /**
@@ -152,6 +185,70 @@ export default function App() {
             setMessageSnackbar('ファイルの読込に失敗しました');
             setOpenStateSnackbar(true);
         }
+    };
+
+    /**
+     * テキストペアを追加
+     * */
+    const addTextPair = () => {
+        const newWorkingTexts = [];
+        workingTexts.map((item) => newWorkingTexts.push(item));
+        newWorkingTexts.push({ key: Date.now().toString(), body: "", yomi: "" });
+        setWorkingTexts(newWorkingTexts);
+        console.log(workingTexts);
+    };
+
+    /**
+     * 対象のテキストペアを削除
+     * @param {Number} index
+     */
+    const removeTextPair = (index) => {
+        console.log(index);
+        const newWorkingTexts = [];
+        workingTexts.map((item) => newWorkingTexts.push(item));
+        newWorkingTexts.splice(index, 1);
+        setWorkingTexts(newWorkingTexts);
+    };
+
+    /**
+     * テキストのペアを編集
+     * @param {number} idx1 n番目のペア
+     * @param {number} idx2 0:本文, 1:ふりがな
+     */
+    const editTextPair = (idx1, idx2, value) => {
+        //console.log(idx1, ", ", idx2, value);
+        const newWorkingTexts = [];
+        workingTexts.map((item) => newWorkingTexts.push(item));
+        if (idx2 === 0) {
+            // 本文の編集
+            newWorkingTexts[idx1].body = value;
+        } else {
+            // ふりがなの編集
+            newWorkingTexts[idx1].yomi = value;
+        }
+        setWorkingTexts(newWorkingTexts);
+    };
+
+    /**
+     * 問題作成
+     * */
+    const createText = () => {
+        const newCreatedTextList = [];
+        createdTextList.map(item => newCreatedTextList.push(item));
+        newCreatedTextList.push({ key: Date.now().toString(), mode: createMode, text: workingTexts });
+        setCreatedTextList(newCreatedTextList);
+        setWorkingTexts([]);
+        closeDialogCreate();
+        console.log(createdTextList);
+    };
+
+    /**
+     * リストアイテム選択イベント
+     * @param {any} idx
+     */
+    const onClickListItem = (idx) => {
+        setSelectedListIndex(idx);
+        openDialogConfirm();
     };
 
     // ナビゲーション
@@ -211,61 +308,6 @@ export default function App() {
         </>
     );
 
-    /**
-     * テキストペアを追加
-     * */
-    const addTextPair = () => {
-        const newWorkingTexts = [];
-        workingTexts.map((item) => newWorkingTexts.push(item));
-        newWorkingTexts.push({ key: Date.now().toString(), body: "", yomi: "" });
-        setWorkingTexts(newWorkingTexts);
-        console.log(workingTexts);
-    };
-
-    /**
-     * 対象のテキストペアを削除
-     * @param {Number} index
-     */
-    const removeTextPair = (index) => {
-        console.log(index);
-        const newWorkingTexts = [];
-        workingTexts.map((item) => newWorkingTexts.push(item));
-        newWorkingTexts.splice(index, 1);
-        setWorkingTexts(newWorkingTexts);
-    };
-
-    /**
-     * テキストのペアを編集
-     * @param {number} idx1 n番目のペア
-     * @param {number} idx2 0:本文, 1:ふりがな
-     */
-    const editTextPair = (idx1, idx2, value) => {
-        //console.log(idx1, ", ", idx2, value);
-        const newWorkingTexts = [];
-        workingTexts.map((item) => newWorkingTexts.push(item));
-        if (idx2 === 0) {
-            // 本文の編集
-            newWorkingTexts[idx1].body = value;
-        } else {
-            // ふりがなの編集
-            newWorkingTexts[idx1].yomi = value;
-        }
-        setWorkingTexts(newWorkingTexts);
-    };
-
-    /**
-     * 問題作成
-     * */
-    const createText = () => {
-        const newCreatedTextList = [];
-        createdTextList.map(item => newCreatedTextList.push(item));
-        newCreatedTextList.push({ key: Date.now().toString(), mode: createMode, text: workingTexts });
-        setCreatedTextList(newCreatedTextList);
-        setWorkingTexts([]);
-        closeDialog();
-        console.log(createdTextList);
-    };
-
     const isListNavigation = () => {
         return (navigationValue === VALUE_NAVIGATION_LIST);
     };
@@ -285,6 +327,8 @@ export default function App() {
                 </Typography>
                 <Typography>問題数 {createdTextList.length}問</Typography>
             </Box>
+
+            {/* 作成ダイアログ */}
             <Dialog id="dialog-create" open={openStateDialogCreate} aria-labelledby="dialog-title-create" aria-describedby="dialog-description-create" scroll={scroll}>
                 <DialogTitle id="dialog-title-create">
                     <Grid container>
@@ -309,10 +353,12 @@ export default function App() {
                 </DialogContent>
                 <DialogActions>
                     <Button variant="contained" onClick={addTextPair}>追加</Button>
-                    <Button variant="contained" onClick={cancelDialog}>キャンセル</Button>
+                    <Button variant="contained" onClick={cancelDialogCreate}>キャンセル</Button>
                     <Button variant="contained" onClick={createText}>作成</Button>
                 </DialogActions>
             </Dialog>
+
+            {/* スナックバー */}
             <Snackbar
                 open={openStateSnackbar}
                 autoHideDuration={6000}
@@ -320,14 +366,33 @@ export default function App() {
                 message={messageSnackbar}
                 action={actionSnackbar}/>
 
+            {/* 確認ダイアログ */}
+            <Dialog id="dialog-edit" open={openStateDialogConfirm} aria-labelledby="dialog-title-edit" aria-describedby="dialog-description-edit" scroll={scroll}>
+                <DialogTitle id="dialog-title-edit">
+                    <Grid container>
+                        <Grid>
+                            <Typography>確認</Typography>
+                        </Grid>
+                    </Grid>
+                </DialogTitle>
+                <DialogContent id="dialog-description-edit" dividers={scroll === DIVIDERS_PAPER}>
+                    <Typography>操作を選択してください</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="contained" onClick={cancelDialogConfirm}>キャンセル</Button>
+                    <Button variant="contained" onClick={removeSelectedItem}>削除</Button>
+                    <Button variant="contained" onClick={createText}>編集</Button>
+                </DialogActions>
+            </Dialog>
+
             <Box id="content">
                 {/* 一覧表示 */}
                 {(isListNavigation()) &&
                     (
                         <Box id="list-box">
                             {(createdTextList.length === 0) &&
-                                <Typography>問題が未作成です。右下のボタンから問題を追加してください。</Typography>}
-                            <TextList list={createdTextList}></TextList>
+                            <Typography>問題が未作成です。右下のボタンから問題を追加してください。</Typography>}
+                        <TextList list={createdTextList} clickEvent={onClickListItem}></TextList>
                             <SpeedDial
                                 ariaLabel="SpeedDial basic example"
                                 sx={{ position: 'fixed', bottom: 70, right: 16 }}

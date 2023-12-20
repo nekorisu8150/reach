@@ -13,7 +13,7 @@ const TextList = (props) => {
         <List>
             {list.map((item, index) => (
                 <Fragment key={item.key}>
-                    <ListItemButton onClick={(e) => (clickEvent) && clickEvent(item)}>
+                    <ListItemButton onClick={(e) => (clickEvent) && clickEvent(index)}>
                         <ListItemText>
                             {index + 1 + ". "}
                             {item.text.map((_item, _index) => (
