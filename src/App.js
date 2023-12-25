@@ -37,7 +37,7 @@ export default function App() {
     // スピードダイヤル
     const [openStateSpeedDial, setOpenStateSpeedDial] = React.useState(false);
     // 作成モード
-    const [createMode, setCreateMode] = React.useState(0);
+    const [createMode, setCreateMode] = React.useState(CREATE_MODE_NUMBER_WRITE);
     // 作成中のテキスト
     const [workingTexts, setWorkingTexts] = React.useState([]);
     // 作成済みのテキストリスト
@@ -53,7 +53,6 @@ export default function App() {
      * 作成ダイアログを表示
      * */
     const openDialogCreate = () => {
-        addTextPair();
         setOpenStateDialogCreate(true);
         closeSpeedDial();
     };
@@ -95,6 +94,7 @@ export default function App() {
      * */
     const openDialogWrite = () => {
         setCreateMode(CREATE_MODE_NUMBER_WRITE);
+        addTextPair();
         openDialogCreate();
     };
 
@@ -103,6 +103,7 @@ export default function App() {
      * */
     const openDialogRead = () => {
         setCreateMode(CREATE_MODE_NUMBER_READ);
+        addTextPair();
         openDialogCreate();
     };
 
@@ -121,15 +122,28 @@ export default function App() {
     };
 
     /**
-     * 選択したアイテムを削除
-     * @param {any} idx
+     * 確認ダイアログ 削除
      */
     const removeSelectedItem = () => {
         const newList = [];
         createdTextList.map(item => newList.push(item));
         newList.splice(selectedListIndex, 1);
         setCreatedTextList(newList);
+        setSelectedListIndex(null);
         closeDialogConfirm();
+    };
+
+    /**
+     * 確認ダイアログ 編集
+     * */
+    const editSelectedItem = () => {
+        setWorkingTexts(createdTextList[selectedListIndex].text);
+        workingTexts.map((item, index) => {
+            editTextPair(index, 0, item.body);
+            editTextPair(index, 1, item.yomi);
+        });
+        closeDialogConfirm();
+        openDialogCreate();
     };
 
     /**
@@ -235,7 +249,14 @@ export default function App() {
     const createText = () => {
         const newCreatedTextList = [];
         createdTextList.map(item => newCreatedTextList.push(item));
-        newCreatedTextList.push({ key: Date.now().toString(), mode: createMode, text: workingTexts });
+        if (selectedListIndex != null) {
+            // 編集モード
+            newCreatedTextList[selectedListIndex].text = workingTexts;
+            setSelectedListIndex(null);
+        } else {
+            // 作成モード
+            newCreatedTextList.push({ key: Date.now().toString(), mode: createMode, text: workingTexts });
+        }
         setCreatedTextList(newCreatedTextList);
         setWorkingTexts([]);
         closeDialogCreate();
@@ -345,8 +366,8 @@ export default function App() {
                                     <DeleteIcon />
                                 </IconButton>
                                 {/*<Button variant="contained" startIcon={<DeleteIcon />}></Button>*/}
-                                <TextField id="filled-basic" label="本文" variant="filled" onChange={(event) => editTextPair(index, 0, event.target.value)} />
-                                <TextField id="filled-basic" label="ふりがな" variant="filled" onChange={(event) => editTextPair(index, 1, event.target.value)} />
+                                <TextField id="filled-basic" label="本文" variant="filled" defaultValue={item.body} onChange={(event) => editTextPair(index, 0, event.target.value)} />
+                                <TextField id="filled-basic" label="ふりがな" variant="filled" defaultValue={item.yomi} onChange={(event) => editTextPair(index, 1, event.target.value)} />
                             </ListItem>
                         ))}
                     </List>
@@ -367,21 +388,14 @@ export default function App() {
                 action={actionSnackbar}/>
 
             {/* 確認ダイアログ */}
-            <Dialog id="dialog-edit" open={openStateDialogConfirm} aria-labelledby="dialog-title-edit" aria-describedby="dialog-description-edit" scroll={scroll}>
-                <DialogTitle id="dialog-title-edit">
-                    <Grid container>
-                        <Grid>
-                            <Typography>確認</Typography>
-                        </Grid>
-                    </Grid>
-                </DialogTitle>
-                <DialogContent id="dialog-description-edit" dividers={scroll === DIVIDERS_PAPER}>
+            <Dialog id="dialog-edit" open={openStateDialogConfirm} aria-describedby="dialog-description-edit" scroll={scroll}>
+                <DialogContent id="dialog-description-edit" >
                     <Typography>操作を選択してください</Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button variant="contained" onClick={cancelDialogConfirm}>キャンセル</Button>
                     <Button variant="contained" onClick={removeSelectedItem}>削除</Button>
-                    <Button variant="contained" onClick={createText}>編集</Button>
+                    <Button variant="contained" onClick={editSelectedItem}>編集</Button>
                 </DialogActions>
             </Dialog>
 
