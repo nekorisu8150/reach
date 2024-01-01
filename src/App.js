@@ -18,11 +18,10 @@ import SpeedDialAction from '@mui/material/SpeedDialAction';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
-import React, { useState } from "react";
+import React from "react";
 import Preview from './compornents/preview';
 import TextList from './compornents/textList';
 import { CREATE_MODE_NUMBER_READ, CREATE_MODE_NUMBER_WRITE, DIVIDERS_PAPER, KEY_SPEED_DIAL_EXPORT, KEY_SPEED_DIAL_IMPORT, KEY_SPEED_DIAL_READ, KEY_SPEED_DIAL_WRITE, KEY__NAVIGATION_LIST, KEY__NAVIGATION_PREVIEW, LABEL_NAVIGATION_LIST, LABEL_NAVIGATION_PREVIEW, NAME_SPEED_DIAL_EXPORT, NAME_SPEED_DIAL_IMPORT, NAME_SPEED_DIAL_READ, NAME_SPEED_DIAL_WRITE, VALUE_NAVIGATION_LIST, VALUE_NAVIGATION_PREVIEW } from "./Constant";
-import dummyCreatedList from './dummy/dummy';
 import "./styles/styles.css";
 
 export default function App() {
@@ -332,12 +331,6 @@ export default function App() {
     const isListNavigation = () => {
         return (navigationValue === VALUE_NAVIGATION_LIST);
     };
-
-    const [first, setFirst] = useState(true);
-    if (first) {
-        first && setCreatedTextList(dummyCreatedList);
-        setFirst(false);
-    }
 
     return (
         <div className="App">
