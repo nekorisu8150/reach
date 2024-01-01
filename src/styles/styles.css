@@ -98,14 +98,14 @@
     }
 
     .text {
-        font-size: 14px;
+        font-size: 25px;
     }
 
     .rb-write, .rb-read {
-        font-size: 18px;
+        font-size: 40px;
     }
 
     .rt-write, rt-read {
-        font-size: 10px;
+        font-size: 25px;
     }
 }
