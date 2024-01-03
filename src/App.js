@@ -33,6 +33,8 @@ export default function App() {
     const [openStateDialogCreate, setOpenStateDialogCreate] = React.useState(false);
     // 編集ダイアログ表示状態
     const [openStateDialogConfirm, setOpenStateDialogConfirm] = React.useState(false);
+    // ファイル名変更ダイアログ表示状態
+    const [openStateDialogNaming, setOpenStateDialogNaming] = React.useState(false);
     // スピードダイヤル
     const [openStateSpeedDial, setOpenStateSpeedDial] = React.useState(false);
     // 作成モード
@@ -47,7 +49,8 @@ export default function App() {
     const [messageSnackbar, setMessageSnackbar] = React.useState('');
     // 選択されたリスト
     const [selectedListIndex, setSelectedListIndex] = React.useState(null);
-
+    // ファイル名
+    const [fileName, setFileName] = React.useState(null);
     /**
      * 作成ダイアログを表示
      * */
@@ -72,6 +75,20 @@ export default function App() {
 
     const closeDialogConfirm = () => {
         setOpenStateDialogConfirm(false);
+    };
+
+    /**
+     * ファイル名変更ダイアログを表示
+     * */
+    const openDialogNaming = () => {
+        setOpenStateDialogNaming(true);
+    };
+
+    /**
+     * ファイル名変更ダイアログを閉じる
+     * */
+    const closeDalogNaming = () => {
+        setOpenStateDialogNaming(false);
     };
 
     /**
@@ -162,14 +179,15 @@ export default function App() {
     const saveAsFile = () => {
         try {
             const a = document.createElement('a');
-            const fileName = 'test.reach';
             const blobData = new Blob([JSON.stringify(createdTextList, null, 4)], {
                 type: 'text/json',
             });
             const jsonURL = URL.createObjectURL(blobData);
             a.href = jsonURL;
-            a.download = fileName;
+            a.download = fileName + '.reach';
             a.click();
+            setFileName(null);
+            closeDalogNaming();
         } catch (e) {
             setMessageSnackbar('ファイルの保存に失敗しました');
             setOpenStateSnackbar(true);
@@ -271,6 +289,14 @@ export default function App() {
         openDialogConfirm();
     };
 
+    /**
+     * ファイル名称変更
+     * @param {string} fileName
+     */
+    const changeFileName = (fileName) => {
+        setFileName(fileName);
+    };
+
     // ナビゲーション
     const actionsNavigation = [
         {
@@ -311,7 +337,7 @@ export default function App() {
             icon: <Icon path={mdiExport} size={3} />,
             name: NAME_SPEED_DIAL_EXPORT,
             key: KEY_SPEED_DIAL_EXPORT,
-            clickEvent: saveAsFile
+            clickEvent: openDialogNaming
         },
     ];
 
@@ -359,8 +385,8 @@ export default function App() {
                                     <DeleteIcon />
                                 </IconButton>
                                 {/*<Button variant="contained" startIcon={<DeleteIcon />}></Button>*/}
-                                <TextField id="filled-basic" label="本文" variant="filled" defaultValue={item.body} onChange={(event) => editTextPair(index, 0, event.target.value)} />
-                                <TextField id="filled-basic" label="ふりがな" variant="filled" defaultValue={item.yomi} onChange={(event) => editTextPair(index, 1, event.target.value)} />
+                                <TextField label="本文" variant="filled" defaultValue={item.body} onChange={(event) => editTextPair(index, 0, event.target.value)} />
+                                <TextField label="ふりがな" variant="filled" defaultValue={item.yomi} onChange={(event) => editTextPair(index, 1, event.target.value)} />
                             </ListItem>
                         ))}
                     </List>
@@ -378,7 +404,7 @@ export default function App() {
                 autoHideDuration={6000}
                 onClose={closeSnackbar}
                 message={messageSnackbar}
-                action={actionSnackbar}/>
+                action={actionSnackbar} />
 
             {/* 確認ダイアログ */}
             <Dialog id="dialog-edit" open={openStateDialogConfirm} aria-describedby="dialog-description-edit" scroll={scroll}>
@@ -392,14 +418,32 @@ export default function App() {
                 </DialogActions>
             </Dialog>
 
+            {/* ファイル名変更ダイアログ */}
+            <Dialog id="dialog-naming" open={openStateDialogNaming} fullWidth aria-describedby="dialog-description-naming" scroll={scroll}>
+                <DialogTitle id="dialog-title-naming">
+                    <Grid container>
+                        <Grid>
+                            <Typography>ファイル名を入力</Typography>
+                        </Grid>
+                    </Grid>
+                </DialogTitle>
+                <DialogContent id="dialog-description-naming">
+                    <TextField label="ファイル名" fullWidth variant="filled" onChange={(event) => { changeFileName(event.target.value) }}></TextField>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="contained" onClick={closeDalogNaming}>キャンセル</Button>
+                    <Button variant="contained" onClick={saveAsFile}>保存</Button>
+                </DialogActions>
+            </Dialog>
+
             <Box id="content">
                 {/* 一覧表示 */}
                 {(isListNavigation()) &&
                     (
                         <Box id="list-box">
                             {(createdTextList.length === 0) &&
-                            <Typography>問題が未作成です。右下のボタンから問題を追加してください。</Typography>}
-                        <TextList list={createdTextList} clickEvent={onClickListItem}></TextList>
+                                <Typography>問題が未作成です。右下のボタンから問題を追加してください。</Typography>}
+                            <TextList list={createdTextList} clickEvent={onClickListItem}></TextList>
                             <SpeedDial
                                 ariaLabel="SpeedDial basic example"
                                 sx={{ position: 'fixed', bottom: 70, right: 16 }}
