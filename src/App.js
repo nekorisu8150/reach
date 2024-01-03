@@ -208,7 +208,7 @@ export default function App() {
         workingTexts.map((item) => newWorkingTexts.push(item));
         newWorkingTexts.push({ key: Date.now().toString(), body: "", yomi: "" });
         setWorkingTexts(newWorkingTexts);
-        console.log(workingTexts);
+        //console.log(workingTexts);
     };
 
     /**
@@ -216,7 +216,7 @@ export default function App() {
      * @param {Number} index
      */
     const removeTextPair = (index) => {
-        console.log(index);
+        //console.log(index);
         const newWorkingTexts = [];
         workingTexts.map((item) => newWorkingTexts.push(item));
         newWorkingTexts.splice(index, 1);
@@ -259,7 +259,7 @@ export default function App() {
         setCreatedTextList(newCreatedTextList);
         setWorkingTexts([]);
         closeDialogCreate();
-        console.log(createdTextList);
+        //console.log(createdTextList);
     };
 
     /**
