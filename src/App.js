@@ -207,12 +207,17 @@ export default function App() {
                 //Fileオブジェクト(テキストファイル)のファイル内容を読み込む
                 reader.readAsText(input.files[0], 'UTF-8');
                 reader.onload = () => {
-                    const result = JSON.parse(reader.result);
-                    setCreatedTextList(result);
+                    try {
+                        const result = JSON.parse(reader.result);
+                        setCreatedTextList(result);
+                    } catch {
+                        setMessageSnackbar('ファイルの読込に失敗しました');
+                        setOpenStateSnackbar(true);
+                    }
                 };
             });
             input.click();
-        } catch (e) {
+        } catch {
             setMessageSnackbar('ファイルの読込に失敗しました');
             setOpenStateSnackbar(true);
         }
