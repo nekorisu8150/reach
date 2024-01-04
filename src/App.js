@@ -368,7 +368,7 @@ export default function App() {
             {/* 共通UI */}
             <Box id="app-bar">
                 <Typography variant="h4">
-                    Reach
+                    Reach(Test)
                 </Typography>
                 <Typography>問題数 {createdTextList.length}問</Typography>
             </Box>
