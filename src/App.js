@@ -21,14 +21,12 @@ import Grid from '@mui/material/Unstable_Grid2';
 import React from "react";
 import Preview from './compornents/preview';
 import TextList from './compornents/textList';
-import { CREATE_MODE_NUMBER_READ, CREATE_MODE_NUMBER_WRITE, DIVIDERS_PAPER, KEY_SPEED_DIAL_EXPORT, KEY_SPEED_DIAL_IMPORT, KEY_SPEED_DIAL_READ, KEY_SPEED_DIAL_WRITE, KEY__NAVIGATION_LIST, KEY__NAVIGATION_PREVIEW, LABEL_NAVIGATION_LIST, LABEL_NAVIGATION_PREVIEW, NAME_SPEED_DIAL_EXPORT, NAME_SPEED_DIAL_IMPORT, NAME_SPEED_DIAL_READ, NAME_SPEED_DIAL_WRITE, VALUE_NAVIGATION_LIST, VALUE_NAVIGATION_PREVIEW } from "./Constant";
+import { CREATE_MODE_NUMBER_READ, CREATE_MODE_NUMBER_WRITE, KEY_SPEED_DIAL_EXPORT, KEY_SPEED_DIAL_IMPORT, KEY_SPEED_DIAL_READ, KEY_SPEED_DIAL_WRITE, KEY__NAVIGATION_LIST, KEY__NAVIGATION_PREVIEW, LABEL_NAVIGATION_LIST, LABEL_NAVIGATION_PREVIEW, MESSAGE_FAILED_LOADING_FILE, MESSAGE_FAILED_SAVING_FILE, MESSAGE_LIST_MAX, NAME_SPEED_DIAL_EXPORT, NAME_SPEED_DIAL_IMPORT, NAME_SPEED_DIAL_READ, NAME_SPEED_DIAL_WRITE, VALUE_NAVIGATION_LIST, VALUE_NAVIGATION_PREVIEW } from "./Constant";
 import "./styles/styles.css";
 
 export default function App() {
     // ナビゲーション
     const [navigationValue, setNavigationValue] = React.useState(VALUE_NAVIGATION_LIST);
-    // ダイアログのスクロール
-    const [scroll, setScroll] = React.useState('paper');
     // 作成ダイアログ表示状態
     const [openStateDialogCreate, setOpenStateDialogCreate] = React.useState(false);
     // 編集ダイアログ表示状態
@@ -109,6 +107,11 @@ export default function App() {
      * 作成画面起動(書き)
      * */
     const openDialogWrite = () => {
+        if (createdTextList.length >= 20) {
+            setMessageSnackbar(MESSAGE_LIST_MAX);
+            setOpenStateSnackbar(true);
+            return;
+        }
         setCreateMode(CREATE_MODE_NUMBER_WRITE);
         addTextPair();
         openDialogCreate();
@@ -118,6 +121,11 @@ export default function App() {
      * 作成画面起動(読み)
      * */
     const openDialogRead = () => {
+        if (createdTextList.length >= 20) {
+            setMessageSnackbar(MESSAGE_LIST_MAX);
+            setOpenStateSnackbar(true);
+            return;
+        }
         setCreateMode(CREATE_MODE_NUMBER_READ);
         addTextPair();
         openDialogCreate();
@@ -154,7 +162,7 @@ export default function App() {
      * */
     const editSelectedItem = () => {
         setWorkingTexts(createdTextList[selectedListIndex].text);
-        workingTexts.map((item, index) => {
+        workingTexts.forEach((item, index) => {
             editTextPair(index, 0, item.body);
             editTextPair(index, 1, item.yomi);
         });
@@ -189,7 +197,7 @@ export default function App() {
             setFileName(null);
             closeDalogNaming();
         } catch (e) {
-            setMessageSnackbar('ファイルの保存に失敗しました');
+            setMessageSnackbar(MESSAGE_FAILED_SAVING_FILE);
             setOpenStateSnackbar(true);
         }
     };
@@ -211,7 +219,7 @@ export default function App() {
                         const result = JSON.parse(reader.result);
                         setCreatedTextList(result);
                     } catch {
-                        setMessageSnackbar('ファイルの読込に失敗しました');
+                        setMessageSnackbar(MESSAGE_FAILED_LOADING_FILE);
                         setOpenStateSnackbar(true);
                     }
                 };
@@ -374,7 +382,7 @@ export default function App() {
             </Box>
 
             {/* 作成ダイアログ */}
-            <Dialog id="dialog-create" open={openStateDialogCreate} aria-labelledby="dialog-title-create" aria-describedby="dialog-description-create" scroll={scroll}>
+            <Dialog id="dialog-create" open={openStateDialogCreate} aria-labelledby="dialog-title-create" aria-describedby="dialog-description-create" scroll={'paper'}>
                 <DialogTitle id="dialog-title-create">
                     <Grid container>
                         <Grid>
@@ -382,7 +390,7 @@ export default function App() {
                         </Grid>
                     </Grid>
                 </DialogTitle>
-                <DialogContent id="dialog-description-create" dividers={scroll === DIVIDERS_PAPER}>
+                <DialogContent id="dialog-description-create" dividers={true}>
                     <List>
                         {workingTexts.map((item, index) => (
                             <ListItem key={item.key}>
@@ -412,7 +420,7 @@ export default function App() {
                 action={actionSnackbar} />
 
             {/* 確認ダイアログ */}
-            <Dialog id="dialog-edit" open={openStateDialogConfirm} aria-describedby="dialog-description-edit" scroll={scroll}>
+            <Dialog id="dialog-edit" open={openStateDialogConfirm} aria-describedby="dialog-description-edit" scroll={'paper'}>
                 <DialogContent id="dialog-description-edit" >
                     <Typography>操作を選択してください</Typography>
                 </DialogContent>
@@ -424,7 +432,7 @@ export default function App() {
             </Dialog>
 
             {/* ファイル名変更ダイアログ */}
-            <Dialog id="dialog-naming" open={openStateDialogNaming} fullWidth aria-describedby="dialog-description-naming" scroll={scroll}>
+            <Dialog id="dialog-naming" open={openStateDialogNaming} fullWidth aria-describedby="dialog-description-naming" scroll={'paper'}>
                 <DialogTitle id="dialog-title-naming">
                     <Grid container>
                         <Grid>

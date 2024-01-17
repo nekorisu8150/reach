@@ -26,3 +26,7 @@ export const NAME_SPEED_DIAL_READ = '読み';
 export const NAME_SPEED_DIAL_EXPORT = 'ファイルに保存';
 export const NAME_SPEED_DIAL_IMPORT = 'ファイルを読み込む';
 
+// message
+export const MESSAGE_FAILED_SAVING_FILE = 'ファイルの保存に失敗しました';
+export const MESSAGE_FAILED_LOADING_FILE = 'ファイルの読込に失敗しました';
+export const MESSAGE_LIST_MAX = '一度に作成できる問題は20問までです';
