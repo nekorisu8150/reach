@@ -217,7 +217,17 @@ export default function App() {
                 reader.onload = () => {
                     try {
                         const result = JSON.parse(reader.result);
-                        setCreatedTextList(result);
+                        const newList = [];
+                        for (let i = 0; i < result.length; i++) {
+                            if (createdTextList.length + newList.length >= 20) {
+                                setMessageSnackbar(MESSAGE_LIST_MAX);
+                                setOpenStateSnackbar(true);
+                                break;
+                            }
+                            createdTextList.map((item) => newList.push(item));
+                            newList.push(result[i]);
+                            setCreatedTextList(newList);
+                        }
                     } catch {
                         setMessageSnackbar(MESSAGE_FAILED_LOADING_FILE);
                         setOpenStateSnackbar(true);
