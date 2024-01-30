@@ -236,7 +236,7 @@ export default function App() {
             });
             input.click();
         } catch {
-            setMessageSnackbar('ファイルの読込に失敗しました');
+            setMessageSnackbar(MESSAGE_FAILED_LOADING_FILE);
             setOpenStateSnackbar(true);
         }
     };
